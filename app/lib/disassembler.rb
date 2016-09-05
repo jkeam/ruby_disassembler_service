@@ -1,5 +1,7 @@
 #!/usr/bin/env ruby
 
+require 'stringio'
+
 def disassemble(src)
   out = StringIO.new
   $stderr = out
