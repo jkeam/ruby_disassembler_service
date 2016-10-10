@@ -67,7 +67,7 @@ Some quick and useful docker commands:
 
 2.  Run docker
   ```
-  docker run -p 8023:8023 -d -e ENV_PORT=8021 rubybytes/ruby23-diss-service
+  docker run -p 8023:8023 -d -e ENV_PORT=8023 rubybytes/ruby23-diss-service
   ```
 
 3.  Ensure its running
