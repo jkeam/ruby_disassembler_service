@@ -25,10 +25,22 @@ describe("Disassembler", function() {
     })
   });
 
+  it("can disassemble with quotes", function(done) {
+    const code = 'puts \\\'hi\\\'';
+
+    disassembler.disassemble({code}).then((obj) => {
+      expect(obj.result).to.not.be.null;
+      done();
+    }).catch((e) => {
+      done(e);
+    })
+  });
+
   it("can fail gracefully", function(done) {
     const code = "not code";
 
     disassembler.disassemble({code}).then((obj) => {
+      // console.log(obj);
       expect(obj.result).to.not.be.null;
       done();
     }).catch((e) => {

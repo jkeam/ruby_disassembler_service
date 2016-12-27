@@ -26,7 +26,7 @@ const handlePost = (req, res) => {
   busboy.on('field', (fieldname, val, fieldnameTruncated, valTruncated, encoding, mimetype) => {
     if (fieldname == 'code') {
       // escape the quote so it doesn't collide with the shell terminator
-      code = val.replace(/\'/g, '\\\'');
+      code = val.replace(/'/g, "\\'");
     }
   });
 
