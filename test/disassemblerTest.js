@@ -15,7 +15,18 @@ describe("Disassembler", function() {
   const disassembler = new Disassembler(logger);
 
   it("can disassemble", function(done) {
-    const code = "puts 'hi'"
+    const code = "puts \\'hi\\'";
+
+    disassembler.disassemble({code}).then((obj) => {
+      expect(obj.result).to.not.be.null;
+      done();
+    }).catch((e) => {
+      done(e);
+    })
+  });
+
+  it("can fail gracefully", function(done) {
+    const code = "not code";
 
     disassembler.disassemble({code}).then((obj) => {
       expect(obj.result).to.not.be.null;

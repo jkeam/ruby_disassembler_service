@@ -21,7 +21,7 @@ class Disassembler {
   disassemble(obj) {
     const code = obj.code;
     return new Promise( (resolve, reject) => {
-      const cmd = `./app/lib/disassembler.rb '${code}'`;
+      const cmd = `./app/lib/disassembler.rb $'${code}'`;
       exec(cmd, (error, stdout, stderr) => {
         if (stderr) {
           this.logger.error(stderr);
