@@ -7,7 +7,7 @@ def disassemble(src)
   $stderr = out
   begin
     RubyVM::InstructionSequence.compile(src).disassemble
-  rescue StandardError => e
+  rescue SyntaxError => e
     puts e.message
     out.string
   end
