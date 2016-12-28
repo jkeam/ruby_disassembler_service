@@ -5,20 +5,34 @@ const Busboy       = require('busboy');
 const http         = require('http');
 const port         = process.env.ENV_PORT || 3000;
 const env          = process.env.NODE_ENV || 'dev';
+const uuid         = require('uuid/v4');
 
-const logger = new (winston.Logger)({
-  transports: [
-    new (winston.transports.Console)(),
-    new (winston.transports.File)({ filename: `./logs/${env}.log` })
-  ]
-});
+const generateUuid = () => {
+  return uuid().replace(/-/, '');
+};
+
+const createLogger = (winston) => {
+  const logger = new (winston.Logger)({
+    transports: [
+      new (winston.transports.Console)(),
+      new (winston.transports.File)({ filename: `./logs/${env}.log` })
+    ]
+  });
+  logger.level = 'debug';
+  return logger;
+};
+
+const logger = createLogger(winston);
 
 const handlePost = (req, res) => {
+  const guid = generateUuid();
+  logger.debug(`${guid}: Disassembling started at ${new Date()}`);
   const disassembler = new Disassembler(logger);
   const busboy = new Busboy({ headers: req.headers });
   let code = "";
 
   const writeOutput = (bytecode) => {
+    logger.debug(`${guid}: Disassembling finished at ${new Date()}`);
     res.writeHead(200, {'Content-Type': 'application/json'});
     res.end(JSON.stringify(bytecode));
   };
@@ -27,6 +41,7 @@ const handlePost = (req, res) => {
     if (fieldname == 'code') {
       // escape the quote so it doesn't collide with the shell terminator
       code = val.replace(/'/g, "\\'");
+      logger.debug(`${guid}: Code -> ${code}`);
     }
   });
 
@@ -46,5 +61,6 @@ const router = (req, res) => {
   }
 };
 
-http.createServer(router).listen(port, '0.0.0.0');
-console.log(`Server running at http://0.0.0.0:${port}/`);
+http.createServer(router).listen(port, '0.0.0.0', () => {
+  logger.info(`Server running at http://0.0.0.0:${port}/`);
+});
