@@ -62,5 +62,5 @@ const router = (req, res) => {
 };
 
 http.createServer(router).listen(port, '0.0.0.0', () => {
-  logger.info(`Server running at http://0.0.0.0:${port}/`);
+  logger.info(`Server started at ${new Date()}, listening on http://0.0.0.0:${port}/`);
 });
