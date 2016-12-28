@@ -7,25 +7,24 @@ const port         = process.env.ENV_PORT || 3000;
 const env          = process.env.NODE_ENV || 'dev';
 const uuid         = require('uuid/v4');
 
-const generateUuid = () => {
-  return uuid().replace(/-/, '');
-};
-
 const createLogger = (winston) => {
   const logger = new (winston.Logger)({
     transports: [
       new (winston.transports.Console)(),
-      new (winston.transports.File)({ filename: `./logs/${env}.log` })
+      new (winston.transports.File)({
+        filename: `./logs/${env}.log`,
+        maxsize: 1000,
+        maxFiles: 10
+      })
     ]
   });
   logger.level = 'debug';
   return logger;
 };
-
 const logger = createLogger(winston);
 
 const handlePost = (req, res) => {
-  const guid = generateUuid();
+  const guid = uuid();
   logger.debug(`${guid}: Disassembling started at ${new Date()}`);
   const disassembler = new Disassembler(logger);
   const busboy = new Busboy({ headers: req.headers });
@@ -56,6 +55,7 @@ const router = (req, res) => {
   if (req.method == 'POST') {
     handlePost(req, res);
   } else {
+    logger.debug(`Bounced non-post request: ${req.method} at ${new Date()}`);
     res.writeHead(200, {'Content-Type': 'text/plain'});
     res.end('Please submit a post with a json payload.');
   }
