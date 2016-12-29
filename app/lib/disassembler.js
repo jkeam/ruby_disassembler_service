@@ -25,12 +25,11 @@ class Disassembler {
       exec('./app/lib/disassembler.rb', [`$'${code}'`], {shell: '/bin/bash'}, (error, stdout, stderr) => {
         if (error) {
           this.logger.error(`${this.guid}: Error -> ${error}`);
-          reject({ errors: stderr });
+          reject({ errors: error });
         } else if (stderr) {
           this.logger.error(`${this.guid}: Stderr-> ${stderr}`);
           reject({ errors: stderr });
         } else {
-          this.logger.debug(`${this.guid}: Diss  -> ${stdout}`);
           this.logger.verbose(`${this.guid}: Disassembling successful`);
           resolve({ result: stdout });
         }
