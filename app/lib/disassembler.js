@@ -3,7 +3,7 @@ const exec = require('child_process').execFile;
 
 class Disassembler {
 
-  constructor(options={logger:null, guid:null}) {
+  constructor(options={logger, guid}) {
     this.logger = options.logger;
     this.guid = options.guid;
   }
