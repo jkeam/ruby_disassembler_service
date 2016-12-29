@@ -31,7 +31,7 @@ class Disassembler {
           reject({ errors: stderr });
         } else {
           this.logger.debug(`${this.guid}: Diss  -> ${stdout}`);
-          this.logger.info(`${this.guid}: Disassembling successful`);
+          this.logger.verbose(`${this.guid}: Disassembling successful`);
           resolve({ result: stdout });
         }
       });
