@@ -1,10 +1,11 @@
 const Promise = require('bluebird');
-const exec = require('child_process').exec;
+const exec = require('child_process').execFile;
 
 class Disassembler {
 
-  constructor(newLogger) {
-    this.logger = newLogger;
+  constructor(options={logger:null, guid:null}) {
+    this.logger = options.logger;
+    this.guid = options.guid;
   }
 
   run(code, done) {
@@ -21,17 +22,17 @@ class Disassembler {
   disassemble(obj) {
     const code = obj.code;
     return new Promise( (resolve, reject) => {
-      const cmd = `/bin/bash -c "./app/lib/disassembler.rb $'${code}'"`;
-      exec(cmd, (error, stdout, stderr) => {
-        if (stderr) {
-          this.logger.error(stderr);
-          reject({
-            errors: stderr
-          });
+      exec('./app/lib/disassembler.rb', [`$'${code}'`], {shell: '/bin/bash'}, (error, stdout, stderr) => {
+        if (error) {
+          this.logger.error(`${this.guid}: Error -> ${error}`);
+          reject({ errors: stderr });
+        } else if (stderr) {
+          this.logger.error(`${this.guid}: Stderr-> ${stderr}`);
+          reject({ errors: stderr });
         } else {
-          resolve({
-            result: stdout
-          });
+          this.logger.debug(`${this.guid}: Diss  -> ${stdout}`);
+          this.logger.info(`${this.guid}: Disassembling successful`);
+          resolve({ result: stdout });
         }
       });
     });

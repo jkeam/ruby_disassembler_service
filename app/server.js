@@ -12,26 +12,27 @@ const createLogger = (winston) => {
     transports: [
       new (winston.transports.Console)(),
       new (winston.transports.File)({
-        filename: `./logs/${env}.log`,
-        maxsize: 1000,
+        dirname: 'logs',
+        filename: `${env}.log`,
+        maxsize: 10000,
         maxFiles: 10
       })
     ]
   });
-  logger.level = 'debug';
+  logger.level = 'info';
   return logger;
 };
 const logger = createLogger(winston);
 
 const handlePost = (req, res) => {
   const guid = uuid();
-  logger.debug(`${guid}: Disassembling started at ${new Date()}`);
-  const disassembler = new Disassembler(logger);
+  logger.info(`${guid}: Disassembling started at ${new Date()}`);
+  const disassembler = new Disassembler({logger, guid});
   const busboy = new Busboy({ headers: req.headers });
   let code = "";
 
   const writeOutput = (bytecode) => {
-    logger.debug(`${guid}: Disassembling finished at ${new Date()}`);
+    logger.info(`${guid}: Disassembling finished at ${new Date()}\n`);
     res.writeHead(200, {'Content-Type': 'application/json'});
     res.end(JSON.stringify(bytecode));
   };
@@ -40,7 +41,7 @@ const handlePost = (req, res) => {
     if (fieldname == 'code') {
       // escape the quote so it doesn't collide with the shell terminator
       code = val.replace(/'/g, "\\'");
-      logger.debug(`${guid}: Code -> ${code}`);
+      logger.debug(`${guid}: Code  -> ${code}`);
     }
   });
 
