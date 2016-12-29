@@ -6,7 +6,7 @@ const env           = process.env.NODE_ENV || 'dev';
 const logLevel      = 'verbose';
 const codeFormatter = (code) => {
   // escape the quote so implementst doesn't collide with the shell terminator
-  code = code.replace(/'/g, "\\'");
+  return code.replace(/'/g, "\\'");
 };
 
 const service = new Service({Disassembler, codeFormatter, port, env, logLevel});
