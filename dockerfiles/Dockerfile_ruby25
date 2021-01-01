@@ -1,0 +1,11 @@
+FROM ruby:2.5
+
+USER nobody
+
+WORKDIR /usr/src/app
+COPY . .
+
+RUN gem install sinatra puma
+EXPOSE 3000
+
+ENTRYPOINT ["rackup", "--host", "0.0.0.0", "-p", "3000"]
