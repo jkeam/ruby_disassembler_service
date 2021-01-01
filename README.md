@@ -6,14 +6,20 @@ A micro-service that disassembles your Ruby code.
 ## Setup
 
 ### Prereq
-1.  Docker
+1. Docker
+2. Ruby
+
+### Test
+```
+rake
+```
 
 ### Building
 ```
-docker build -t jkeam/ruby_disassembler30_service -f ./dockerfiles/Dockerfile_ruby30
+docker build -t jonnyman9/ruby30-diss-service -f ./dockerfiles/Dockerfile_ruby30 .
 ```
 
 ### Running
 ```
-docker run -p 3000:3000 jkeam/ruby_disassembler30_service
+docker run -p 3000:3000 jonnyman9/ruby30-diss-service
 ```
