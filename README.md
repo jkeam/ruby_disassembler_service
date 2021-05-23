@@ -7,7 +7,7 @@ A micro-service that disassembles your Ruby code.
 
 ### Prereq
 1. Docker
-2. Ruby
+2. Ruby 3.0
 
 ### Test
 ```
