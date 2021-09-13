@@ -11,7 +11,7 @@ A micro-service that disassembles your Ruby code.
 
 ### Test
 ```
-rake
+bundle exec rake
 ```
 
 ### Building
