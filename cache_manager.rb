@@ -2,10 +2,10 @@ require 'redis'
 require 'digest'
 
 class CacheManager
-  # url looks like "redis://:p4ssw0rd@10.0.1.1:6380/15"
+  attr_accessor :logger
+  # url looks like "redis://:p4ssw0rd@10.0.1.1:6379/0"
   # username, password
-  def initializer(logger, url)
-    @logger = logger
+  def initialize(url)
     @redis = Redis.new(url: url)
   end
 
@@ -16,7 +16,7 @@ class CacheManager
     @redis.ping
     return true
   rescue StandardError => e
-    @logger.error 'Error seeing if connected in cache manager'
+    @logger&.error 'Error seeing if connected in cache manager'
     return false
   end
 
@@ -25,7 +25,7 @@ class CacheManager
     return nil unless self.connected?
     @redis.get(Digest::MD5.hexdigest(src))
   rescue StandardError => e
-    @logger.error 'Error getting cached value from cache manager'
+    @logger&.error 'Error getting cached value from cache manager'
     return nil
   end
 
@@ -33,7 +33,7 @@ class CacheManager
   def set_cached(src, diss)
     @redis.set(Digest::MD5.hexdigest(src), diss)
   rescue StandardError => e
-    @logger.error 'Error setting cached value from cache manager'
+    @logger&.error 'Error setting cached value from cache manager'
     return nil
   end
 end
