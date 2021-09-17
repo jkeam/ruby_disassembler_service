@@ -1,0 +1,12 @@
+FROM ruby:3.0
+
+USER nobody
+
+WORKDIR /usr/src/app
+COPY . .
+RUN rm ./config.ru && mv config_test.ru config.ru
+
+RUN gem install sinatra puma redis
+EXPOSE 4000
+
+ENTRYPOINT ["rackup", "--host", "0.0.0.0", "-p", "4000"]
