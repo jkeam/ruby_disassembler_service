@@ -2,6 +2,21 @@ require 'sinatra'
 require 'json'
 require_relative './disassembler'
 
+configure do
+  enable :cross_origin
+end
+
+before do
+  response.headers['Access-Control-Allow-Origin'] = '*'
+end
+
+options '*' do
+  response.headers['Allow'] = 'POST, OPTIONS'
+  response.headers['Access-Control-Allow-Headers'] = 'X-Requested-With, X-HTTP-Method-Override, Content-Type, Cache-Control, Accept'
+  response.headers['Access-Control-Allow-Origin'] = '*'
+  200
+end
+
 post '/?' do
   begin
     json = JSON.parse request.body.read

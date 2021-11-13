@@ -21,5 +21,5 @@ docker build -t jonnyman9/ruby30-diss-service -f ./dockerfiles/Dockerfile_ruby30
 
 ### Running
 ```
-docker run -p 3000:3000 jonnyman9/ruby30-diss-service
+docker run --rm -p 3000:3000 jonnyman9/ruby30-diss-service
 ```
